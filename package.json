@@ -19,7 +19,7 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "esint js/"
+    "test": "eslint js/"
   },
   "engines": {
     "node": "^6.9"
