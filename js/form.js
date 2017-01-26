@@ -4,21 +4,21 @@ var framingForm = document.querySelector('.upload-overlay');
 var framingFormClose = framingForm.querySelector('.upload-form-cancel');
 var uploadForm = document.querySelector('#upload-select-image');
 var uploadImageName = document.querySelector('#upload-file');
-var imagePreview = document.querySelector('.filter-image-preview');
-var buttons = document.querySelector('.upload-filter');
-var resizeValue = document.querySelector('.upload-resize-controls-value');
-var resizeValueDec = document.querySelector('.upload-resize-controls-button-dec');
-var resizeValueInc = document.querySelector('.upload-resize-controls-button-inc');
+var imagePreview = framingForm.querySelector('.filter-image-preview');
+var buttons = framingForm.querySelector('.upload-filter');
+var resizeValue = framingForm.querySelector('.upload-resize-controls-value');
+var resizeValueDec = framingForm.querySelector('.upload-resize-controls-button-dec');
+var resizeValueInc = framingForm.querySelector('.upload-resize-controls-button-inc');
 
-uploadImageName.addEventListener('change', function () {
-  uploadForm.classList.add('invisible');
-  framingForm.classList.remove('invisible');
-});
+var toggle = function (x) {
+  x.addEventListener('click', function () {
+    uploadForm.classList.toggle('invisible');
+    framingForm.classList.toggle('invisible');
+  });
+};
 
-framingFormClose.addEventListener('click', function () {
-  framingForm.classList.add('invisible');
-  uploadForm.classList.remove('invisible');
-});
+toggle(uploadImageName);
+toggle(framingFormClose);
 
 function filter(event) {
   imagePreview.className = 'filter-image-preview';
@@ -33,21 +33,22 @@ for (var i = 0; i < buttons.length; i++) {
 var resizeNumber = 100;
 resizeValue.value = resizeNumber + '%';
 
+var valueScaleResize = function () {
+  var scaleNumber = resizeNumber / 100;
+  resizeValue.value = resizeNumber + '%';
+  imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+};
+
 resizeValueDec.addEventListener('click', function () {
-  if (resizeNumber > 0) {
+  if (resizeNumber > 25) {
     resizeNumber -= 25;
-    var scaleNumber = resizeNumber / 100;
-    resizeValue.value = resizeNumber + '%';
-    imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+    valueScaleResize();
   }
 });
 
 resizeValueInc.addEventListener('click', function () {
   if (resizeNumber < 100) {
     resizeNumber += 25;
-    var scaleNumber = resizeNumber / 100;
-    resizeValue.value = resizeNumber + '%';
-    imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+    valueScaleResize();
   }
 });
-
