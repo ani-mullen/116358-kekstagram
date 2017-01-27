@@ -10,15 +10,15 @@ var resizeValue = framingForm.querySelector('.upload-resize-controls-value');
 var resizeValueDec = framingForm.querySelector('.upload-resize-controls-button-dec');
 var resizeValueInc = framingForm.querySelector('.upload-resize-controls-button-inc');
 
-var toggle = function (x) {
-  x.addEventListener('click', function () {
+var toggle = function (variableName, eventName) {
+  variableName.addEventListener(eventName, function () {
     uploadForm.classList.toggle('invisible');
     framingForm.classList.toggle('invisible');
   });
 };
 
-toggle(uploadImageName);
-toggle(framingFormClose);
+toggle(uploadImageName, 'change');
+toggle(framingFormClose, 'click');
 
 function filter(event) {
   imagePreview.className = 'filter-image-preview';
