@@ -86,9 +86,10 @@ function filterChange(evt) {
 imageFilter.addEventListener('click', filterChange);
 imageFilter.addEventListener('keydown', filterChange);
 
-resizeValue.setAttribute('value', '100%');
+// масштабирование
 var resizeNumber = 100;
 resizeValue.value = resizeNumber + '%';
+resizeValue.setAttribute('value', resizeValue.value);
 
 var valueScaleResize = function () {
   var scaleNumber = resizeNumber / 100;
