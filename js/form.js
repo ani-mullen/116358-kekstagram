@@ -49,11 +49,12 @@ var hideFramingForm = function () {
   framingForm.classList.add('invisible');
   uploadForm.classList.remove('invisible');
   imagePreview.className = 'filter-image-preview';
+  imageResize(100); // очистка resize картинки
   document.removeEventListener('keydown', KeydownHandler);
 };
 
 // Функция изменения значения Aria роли
-var ariaRole = function (item, valueAttribute) {
+var ariaRoleToggle = function (item, valueAttribute) {
   var booleanValue = (item.getAttribute('valueAttribute') === 'true');
   item.setAttribute(valueAttribute, !booleanValue);
 };
@@ -61,14 +62,14 @@ var ariaRole = function (item, valueAttribute) {
 // Обработчик клика на крест
 framingFormClose.addEventListener('click', function () {
   hideFramingForm();
-  ariaRole(framingFormClose, 'aria-pressed');
+  ariaRoleToggle(framingFormClose, 'aria-pressed');
 });
 
 // Обработчик нажатия на крест
 framingFormClose.addEventListener('keydown', function (evt) {
   if (isActivateEvent(evt)) {
     hideFramingForm();
-    ariaRole(framingFormClose, 'aria-pressed');
+    ariaRoleToggle(framingFormClose, 'aria-pressed');
   }
 });
 
@@ -79,7 +80,15 @@ function filterChange(evt) {
     var nameFilter = document.getElementById(element.htmlFor).value;
     imagePreview.className = 'filter-image-preview';
     imagePreview.classList.add('filter-' + nameFilter);
-    ariaRole(evt.target, 'aria-checked');
+    ariaCheckedFalse();
+    ariaRoleToggle(evt.target, 'aria-checked');
+  }
+  // обнуление aria-checked
+  function ariaCheckedFalse() {
+    var first = document.querySelectorAll('.upload-filter-preview');
+    for (var i = 0; i < first.length; i++) {
+      first[i].setAttribute('aria-checked', false);
+    }
   }
 }
 
@@ -87,26 +96,28 @@ imageFilter.addEventListener('click', filterChange);
 imageFilter.addEventListener('keydown', filterChange);
 
 // масштабирование
-var resizeNumber = 100;
-resizeValue.value = resizeNumber + '%';
-resizeValue.setAttribute('value', resizeValue.value);
+imageResize(100);
 
-var valueScaleResize = function () {
-  var scaleNumber = resizeNumber / 100;
+function imageResize(resizeNumber) {
   resizeValue.value = resizeNumber + '%';
+  resizeValue.setAttribute('value', resizeValue.value);
+  var scaleNumber = resizeNumber / 100;
   imagePreview.style.transform = 'scale(' + scaleNumber + ')';
-};
+}
+
+function valueImageResize(step) {
+  var resizeNumber = parseInt(resizeValue.value, 10);
+  resizeNumber += step;
+  if (resizeNumber >= 25 && resizeNumber <= 100) {
+    imageResize(resizeNumber);
+  }
+}
 
 resizeValueDec.addEventListener('click', function () {
-  if (resizeNumber > 25) {
-    resizeNumber -= 25;
-    valueScaleResize();
-  }
+  valueImageResize(-25);
 });
 
 resizeValueInc.addEventListener('click', function () {
-  if (resizeNumber < 100) {
-    resizeNumber += 25;
-    valueScaleResize();
-  }
+  valueImageResize(25);
 });
+
