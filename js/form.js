@@ -86,6 +86,7 @@ function filterChange(evt) {
 imageFilter.addEventListener('click', filterChange);
 imageFilter.addEventListener('keydown', filterChange);
 
+resizeValue.setAttribute('value', '100%');
 var resizeNumber = 100;
 resizeValue.value = resizeNumber + '%';
 
