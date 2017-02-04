@@ -32,6 +32,11 @@ var isActivateEvent = function (evt) {
   return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
 };
 
+// Функция определения клика
+var isClickEvent = function (evt) {
+  return evt.type === 'click';
+};
+
 // Обработчик нажатий на клавиатуру (ESC)
 var KeydownHandler = function (evt) {
   if (evt.keyCode === ESCAPE_KEY_CODE) {
@@ -49,8 +54,8 @@ var hideFramingForm = function () {
 
 // Функция изменения значения Aria роли
 var ariaRole = function (item, valueAttribute) {
-  var bolean = (item.getAttribute('valueAttribute') === 'true');
-  item.setAttribute(valueAttribute, !bolean);
+  var booleanValue = (item.getAttribute('valueAttribute') === 'true');
+  item.setAttribute(valueAttribute, !booleanValue);
 };
 
 // Обработчик клика на крест
@@ -67,34 +72,19 @@ framingFormClose.addEventListener('keydown', function (evt) {
   }
 });
 
-
-// Функция обнуления значений aria-checked (false)
-var deleteAria = function () {
-  for (var i = 0; i < imageFilter.children.length; i++) {
-    var childElement = imageFilter.children[i];
-    if (childElement.tagName === 'INPUT') {
-      childElement.setAttribute('aria-checked', false);
-    }
-  }
-};
-
-// Функция переключения фильтров
-function filter(evt) {
-  if (event.target.type === 'radio') {
+function filterChange(evt) {
+  var element = evt.target.parentNode;
+  var elementTagName = element.tagName;
+  if ((isClickEvent(evt) || isActivateEvent(evt)) && (elementTagName === 'LABEL')) {
+    var nameFilter = document.getElementById(element.htmlFor).value;
     imagePreview.className = 'filter-image-preview';
-    imagePreview.classList.add('filter-' + evt.target.value);
-    deleteAria();
+    imagePreview.classList.add('filter-' + nameFilter);
     ariaRole(evt.target, 'aria-checked');
   }
-  /*
-  if (isActivateEvent(evt)) {
-    действия для нажатия фильтра по клавише Enter
-  }
-  */
 }
 
-imageFilter.addEventListener('click', filter); // fieldset.upload-filter-controls - если кликаем на фильтр
-imageFilter.addEventListener('keydown', filter); // div.upload-filter-preview - если нажимаем фильтр по клавише
+imageFilter.addEventListener('click', filterChange);
+imageFilter.addEventListener('keydown', filterChange);
 
 var resizeNumber = 100;
 resizeValue.value = resizeNumber + '%';
