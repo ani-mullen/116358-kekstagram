@@ -1,78 +1,99 @@
 'use strict';
 
-var framingForm = document.querySelector('.upload-overlay');
-var framingFormClose = framingForm.querySelector('.upload-form-cancel');
-var uploadForm = document.querySelector('#upload-select-image');
-var uploadImageName = document.querySelector('#upload-file');
-window.imagePreview = framingForm.querySelector('.filter-image-preview');
-var imageFilter = framingForm.querySelector('.upload-filter-controls');
+var imagePreview = document.querySelector('.filter-image-preview');
 
-// Функция переключения видимости загрузчика и редактора
-var toggle = function () {
-  uploadForm.classList.toggle('invisible');
-  framingForm.classList.toggle('invisible');
-};
+// Переключение виджетов
+(function () {
+  var framingFormClose = document.querySelector('.upload-form-cancel');
+  var uploadImageName = document.querySelector('#upload-file');
+  var uploadImageLabel = document.querySelector('.upload-file');
 
-// Обработчик загрузки картинки
-uploadImageName.addEventListener('change', function () {
-  uploadImageName.value = (''); // очистка названия картинки
-  toggle();
-  framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-роли для framingFormClose
-  document.addEventListener('keydown', window.KeydownHandler);
-});
+  // Обработчик нажатия на форму загрузки
+  uploadImageLabel.addEventListener('keydown', function (evt) {
+    if ((window.assist.isActivationEvent(evt)) && (evt.target.tagName === 'LABEL')) {
+      uploadImageName.click();
+      window.isWidgetVisibility.focusSetupOpen(function () {
+        uploadImageLabel.focus();
+      });
+    }
+  });
 
-// Функция определения ENTER_KEY_CODE
-window.isActivateEvent = (function () {
-  var ENTER_KEY_CODE = 13;
-  return function (evt) {
-    return evt.keyCode && evt.keyCode === ENTER_KEY_CODE;
+  // Обработчик загрузки картинки
+  uploadImageName.addEventListener('change', function () {
+    window.isWidgetVisibility.openFramingForm();
+    uploadImageName.value = (''); // очистка названия картинки
+    document.querySelector('#upload-filter-none').click(); // подстветка первого фильтра
+
+    window.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
+    framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-pressed для framingFormClose
+  });
+
+  var clearValues = function () {
+    imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
+    window.scaling.resetScale(); // сброс масштаба
+    window.initializeFilters.ariaRoleFilterCheckedFalse(); // обнуление aria-checked у всех фильтров
+
+    window.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
+    uploadImageLabel.setAttribute('aria-pressed', false); // очистка значения aria-pressed для uploadImageLabel
+    window.initializeFilters.ariaRoleFilterNoneTrue(); // возвращение aria-checked = true первому выбранному фильтру
   };
+  // Обработчик клика на крест
+  framingFormClose.addEventListener('click', function () {
+    window.isWidgetVisibility.hideFramingForm();
+    clearValues();
+  });
+
+  // Обработчик нажатия на крест
+  framingFormClose.addEventListener('keydown', function (evt) {
+    if (window.assist.isActivationEvent(evt)) {
+      window.isWidgetVisibility.hideFramingForm();
+      clearValues();
+    }
+  });
 })();
 
-// Функция определения клика
-window.isClickEvent = (function () {
-  return function (evt) {
-    return evt.type === 'click';
-  };
-})();
+// Изменение масштаба
+window.scaling = (function () {
+  var resizeValue = document.querySelector('.upload-resize-controls-value');
+  var resizeValueDec = document.querySelector('.upload-resize-controls-button-dec');
+  var resizeValueInc = document.querySelector('.upload-resize-controls-button-inc');
 
-// Обработчик нажатий на клавиатуру (ESC)
-window.KeydownHandler = (function () {
-  var ESCAPE_KEY_CODE = 27;
-  return function (evt) {
-    if (evt.keyCode === ESCAPE_KEY_CODE) {
-      toggle();
+  var scale = function (scaleNumber) {
+    imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+  };
+
+  resizeValueDec.addEventListener('click', function () {
+    var currentValue = parseInt(resizeValue.value, 10);
+    window.createScale(resizeValue, -25, currentValue, scale);
+  });
+
+  resizeValueInc.addEventListener('click', function () {
+    var currentValue = parseInt(resizeValue.value, 10);
+    window.createScale(resizeValue, 25, currentValue, scale);
+  });
+
+  return {
+    resetScale: function () {
+      window.createScale(resizeValue, 0, 100, scale);
     }
   };
 })();
 
-// Функция скрытия редактора
-var hideFramingForm = function () {
-  framingForm.classList.add('invisible');
-  uploadForm.classList.remove('invisible');
-  window.imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
-  window.createScale(window.resizeValue, 0, 100); // очистка resize картинки
-  window.ariaRoleToggle(framingFormClose, 'aria-pressed');
-  window.initializeFilters.ariaRoleFilterCheckedFalse();
-  window.initializeFilters.ariaRoleFilterNoneTrue();
-  document.removeEventListener('keydown', window.KeydownHandler);
-};
+window.scaling.resetScale(); // сброс масштаба
 
-// Обработчик клика на крест
-framingFormClose.addEventListener('click', function () {
-  hideFramingForm();
-  window.ariaRoleToggle(framingFormClose, 'aria-pressed');
-});
+// Переключение фильтров
+(function () {
+  var imageFilter = document.querySelector('.upload-filter-controls');
 
-// Обработчик нажатия на крест
-framingFormClose.addEventListener('keydown', function (evt) {
-  if (window.isActivateEvent(evt)) {
-    hideFramingForm();
-  }
-});
+  var addFilter = function (nameFilter) {
+    imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
+    imagePreview.classList.add('filter-' + nameFilter);
+  };
 
-imageFilter.addEventListener('click', window.initializeFilters.toggleFilter);
-imageFilter.addEventListener('keydown', window.initializeFilters.toggleFilter);
-
-// масштабирование
-window.createScale(window.resizeValue, 0, 100);
+  imageFilter.addEventListener('click', function (evt) {
+    window.initializeFilters.toggleFilter(evt, addFilter);
+  });
+  imageFilter.addEventListener('keydown', function (evt) {
+    window.initializeFilters.toggleFilter(evt, addFilter);
+  });
+})();
