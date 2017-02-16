@@ -12,7 +12,7 @@ var imagePreview = document.querySelector('.filter-image-preview');
   uploadImageLabel.addEventListener('keydown', function (evt) {
     if ((window.assist.isActivationEvent(evt)) && (evt.target.tagName === 'LABEL')) {
       uploadImageName.click();
-      window.isWidgetVisibility.focusSetupOpen(function () {
+      window.isWidgetVisibility.focusUploadForm(function () {
         uploadImageLabel.focus();
       });
     }

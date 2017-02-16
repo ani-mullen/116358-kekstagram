@@ -32,13 +32,13 @@ window.isWidgetVisibility = (function () {
     }
   };
 
-  var focusSetupOpen = function (callback) {
+  var focusUploadForm = function (callback) {
     onframingFormClose = callback;
   };
 
   return {
     openFramingForm: openFramingForm,
     hideFramingForm: hideFramingForm,
-    focusSetupOpen: focusSetupOpen
+    focusUploadForm: focusUploadForm
   };
 })();
