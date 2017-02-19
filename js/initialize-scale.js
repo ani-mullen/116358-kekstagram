@@ -6,8 +6,8 @@ window.createScale = (function () {
   return function (element, callback) {
 
     var resizeValue = element.children[1];
-    var resizeInc = element.children[0];
-    var resizeDec = element.children[2];
+    var resizeDec = element.children[0];
+    var resizeInc = element.children[2];
 
     function setImageSize(currentNumber) {
       resizeValue.value = currentNumber + '%';
@@ -30,13 +30,15 @@ window.createScale = (function () {
       }
     }
 
-    resizeInc.addEventListener('click', function () {
+    function decreaseSize() {
       resizeImageValue(-25);
-    });
-
-    resizeDec.addEventListener('click', function () {
+    }
+    function increaseSize() {
       resizeImageValue(25);
-    });
+    }
+
+    resizeDec.addEventListener('click', decreaseSize);
+    resizeInc.addEventListener('click', increaseSize);
 
     return function () {
       setImageSize(100);

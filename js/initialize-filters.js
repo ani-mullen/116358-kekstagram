@@ -37,13 +37,18 @@ window.initializeFilters = (function () {
 
     ariaRoleFilterNoneTrue();
 
-    element.addEventListener('click', function (evt) {
+    function filterChange(evt) {
       filterClickHandler(evt);
-    });
+    }
 
-    element.addEventListener('keydown', function (evt) {
-      filterClickHandler(evt);
-    });
+    element.addEventListener('click', filterChange);
+    element.addEventListener('keydown', filterChange);
+
+    return function () {
+      if (typeof callback === 'function') {
+        callback('none');
+      }
+    };
 
   };
 

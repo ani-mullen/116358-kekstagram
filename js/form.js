@@ -7,13 +7,14 @@ var scaleClickHandler = function (scaleNumber) {
   imagePreview.style.transform = 'scale(' + scaleNumber + ')';
 };
 
-window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
-
 // Изменени фильтра
 var filterClickHandler = function (nameFilter) {
   imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
   imagePreview.classList.add('filter-' + nameFilter);
 };
+
+var resetScale = window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
+var resetFilter = window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
 
 // Переключение виджетов
 (function () {
@@ -35,7 +36,7 @@ var filterClickHandler = function (nameFilter) {
   uploadImageName.addEventListener('change', function () {
     window.isWidgetVisibility.openFramingForm();
     uploadImageName.value = (''); // очистка названия картинки
-    window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
+
 
     window.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
     framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-pressed для framingFormClose
@@ -44,6 +45,8 @@ var filterClickHandler = function (nameFilter) {
   var clearValues = function () {
     window.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
     uploadImageLabel.setAttribute('aria-pressed', false); // очистка значения aria-pressed для uploadImageLabel
+    resetScale();
+    resetFilter();
   };
   // Обработчик клика на крест
   framingFormClose.addEventListener('click', function () {
