@@ -6,6 +6,9 @@ var imagePreview = document.querySelector('.filter-image-preview');
 var scaleClickHandler = function (scaleNumber) {
   imagePreview.style.transform = 'scale(' + scaleNumber + ')';
 };
+
+window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
+
 // Изменени фильтра
 var filterClickHandler = function (nameFilter) {
   imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
@@ -32,7 +35,6 @@ var filterClickHandler = function (nameFilter) {
   uploadImageName.addEventListener('change', function () {
     window.isWidgetVisibility.openFramingForm();
     uploadImageName.value = (''); // очистка названия картинки
-    window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
     window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
 
     window.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
