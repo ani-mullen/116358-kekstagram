@@ -1,31 +1,48 @@
 'use strict';
-window.resizeValue = document.querySelector('.upload-resize-controls-value');
 
 // масштабирование
 window.createScale = (function () {
 
-  return function (element, step, currentValue) {
-    currentValue += step;
-    if (currentValue >= 25 && currentValue <= 100) {
-      element.value = currentValue + '%';
-      element.setAttribute('value', element.value);
-      var scaleNumber = currentValue / 100;
-      window.imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+  return function (element, callback) {
+
+    var resizeValue = element.children[1];
+    var resizeDec = element.children[0];
+    var resizeInc = element.children[2];
+
+    function setImageSize(currentNumber) {
+      resizeValue.value = currentNumber + '%';
+      resizeValue.setAttribute('value', resizeValue.value);
+
+      var scaleNumber = currentNumber / 100;
+
+      if (typeof callback === 'function') {
+        callback(scaleNumber);
+      }
     }
+
+    setImageSize(100);
+
+    function resizeImageValue(step) {
+      var currentNumber = parseInt(resizeValue.value, 10);
+      currentNumber += step;
+      if (currentNumber >= 25 && currentNumber <= 100) {
+        setImageSize(currentNumber);
+      }
+    }
+
+    function decreaseSize() {
+      resizeImageValue(-25);
+    }
+    function increaseSize() {
+      resizeImageValue(25);
+    }
+
+    resizeDec.addEventListener('click', decreaseSize);
+    resizeInc.addEventListener('click', increaseSize);
+
+    return function () {
+      setImageSize(100);
+    };
   };
-})();
 
-(function () {
-  var resizeValueDec = document.querySelector('.upload-resize-controls-button-dec');
-  var resizeValueInc = document.querySelector('.upload-resize-controls-button-inc');
-
-  resizeValueDec.addEventListener('click', function () {
-    var currentValue = parseInt(window.resizeValue.value, 10);
-    window.createScale(window.resizeValue, -25, currentValue);
-  });
-
-  resizeValueInc.addEventListener('click', function () {
-    var currentValue = parseInt(window.resizeValue.value, 10);
-    window.createScale(window.resizeValue, 25, currentValue);
-  });
 })();

@@ -2,31 +2,54 @@
 // Функция переключения фильтров
 window.initializeFilters = (function () {
 
-  // обнуление aria-checked
-  var ariaCheckedFalse = function () {
-    var ariaRoleFilter = document.querySelectorAll('.upload-filter-preview');
-    for (var i = ariaRoleFilter.length; i--;) {
-      ariaRoleFilter[i].setAttribute('aria-checked', false);
-    }
-  };
+  return function (element, callback) {
 
-  return {
-    toggleFilter: function (evt) {
-      var element = evt.target.parentNode;
-      var elementTagName = element.tagName;
-      if ((window.isClickEvent(evt) || window.isActivateEvent(evt)) && (elementTagName === 'LABEL')) {
-        var nameFilter = document.getElementById(element.htmlFor).value;
-        window.imagePreview.className = 'filter-image-preview';
-        window.imagePreview.classList.add('filter-' + nameFilter);
-        ariaCheckedFalse();
-        window.ariaRoleToggle(evt.target, 'aria-checked');
+    document.querySelector('#upload-filter-none').click(); // подстветка первого фильтра
+
+    function filterClickHandler(evt) {
+      var newElement = evt.target.parentNode;
+      var elementTagName = newElement.tagName;
+      if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
+        var nameFilter = document.getElementById(newElement.htmlFor).value;
+        ariaCheckedFalse(); // обнуление aria-checked
+        window.ariaRoleToggle(evt.target, 'aria-checked'); // переключение aria-checked
+        document.querySelector('#upload-filter-' + nameFilter).click(); // подсветка выбранного фильтра
+
+        if (typeof callback === 'function') {
+          callback(nameFilter);
+        }
       }
-    },
-    ariaRoleFilterCheckedFalse: ariaCheckedFalse,
-    ariaRoleFilterNoneTrue: function (evt) {
+    }
+
+    // очистка aria-checked
+    var ariaCheckedFalse = function () {
+      var ariaRoleFilter = document.querySelectorAll('.upload-filter-preview');
+      for (var i = ariaRoleFilter.length; i--;) {
+        ariaRoleFilter[i].setAttribute('aria-checked', false);
+      }
+    };
+
+    // возвращение aria-checked = true первому выбранному фильтру
+    var ariaRoleFilterNoneTrue = function () {
       var ariaRoleNone = document.querySelector('.upload-filter-preview');
       ariaRoleNone.setAttribute('aria-checked', true);
+    };
+
+    ariaRoleFilterNoneTrue();
+
+    function filterChange(evt) {
+      filterClickHandler(evt);
     }
+
+    element.addEventListener('click', filterChange);
+    element.addEventListener('keydown', filterChange);
+
+    return function () {
+      if (typeof callback === 'function') {
+        callback('none');
+      }
+    };
+
   };
 
 })();
