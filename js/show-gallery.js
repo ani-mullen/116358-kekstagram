@@ -14,6 +14,7 @@ window.showGallery = (function () {
     (function () {
       galleryOverlay.classList.remove('invisible');
       window.addEventListener('keydown', onKeyDownEsc);
+      galleryOverlayClose.setAttribute('aria-pressed', false);
       galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', picture.url);
       galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
       galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
@@ -21,6 +22,7 @@ window.showGallery = (function () {
 
     var hideGalleryOverlay = function () {
       galleryOverlay.classList.add('invisible');
+      window.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
       window.removeEventListener('keydown', onKeyDownEsc);
     };
 
@@ -33,6 +35,8 @@ window.showGallery = (function () {
         hideGalleryOverlay();
       }
     });
-
+    return function () {
+      window.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
+    };
   };
 })();

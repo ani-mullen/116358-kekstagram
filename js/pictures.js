@@ -22,8 +22,7 @@ window.pictures = (function () {
       var pictureToClone = pictureTemplate.content.querySelector('.picture');
       var pictureElement = pictureToClone.cloneNode(true);
 
-      pictureElement.tabIndex = '0';
-      pictureElement.href = '#';
+      pictureElement.tabIndex = '1';
       pictureElement.querySelector('img').src = picture.url;
       pictureElement.querySelector('.picture-likes').textContent = picture.likes;
       pictureElement.querySelector('.picture-comments').textContent = picture.comments.length;
