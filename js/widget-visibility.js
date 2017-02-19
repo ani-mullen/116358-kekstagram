@@ -9,16 +9,16 @@ window.isWidgetVisibility = (function () {
     uploadForm.classList.toggle('invisible');
     framingForm.classList.toggle('invisible');
   };
-  // Функция переключения видимости загрузчика и редактора
-  var openFramingForm = function () {
-    toggleWidgets();
-    document.addEventListener('keydown', onKeyDownEsc);
-  };
   // Если нажали на Esc
   var onKeyDownEsc = function (evt) {
     if (window.assist.isDeactivationEvent(evt)) {
       toggleWidgets();
     }
+  };
+  // Функция переключения видимости загрузчика и редактора
+  var openFramingForm = function () {
+    toggleWidgets();
+    document.addEventListener('keydown', onKeyDownEsc);
   };
 
   // Функция скрытия редактора

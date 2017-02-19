@@ -15,6 +15,7 @@ var filterClickHandler = function (nameFilter) {
 
 var resetScale = window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
 var resetFilter = window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
+window.pictures();
 
 // Переключение виджетов
 (function () {
@@ -62,4 +63,3 @@ var resetFilter = window.initializeFilters(document.querySelector('.upload-filte
     }
   });
 })();
-
