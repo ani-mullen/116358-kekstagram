@@ -11,14 +11,13 @@ window.showGallery = (function () {
       }
     };
 
-    (function () {
-      galleryOverlay.classList.remove('invisible');
-      window.addEventListener('keydown', onKeyDownEsc);
-      galleryOverlayClose.setAttribute('aria-pressed', false);
-      galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', picture.url);
-      galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
-      galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
-    })();
+    galleryOverlay.classList.remove('invisible');
+    window.addEventListener('keydown', onKeyDownEsc);
+    galleryOverlayClose.setAttribute('aria-pressed', false);
+    galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', picture.url);
+    galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
+    galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
+
 
     var hideGalleryOverlay = function () {
       galleryOverlay.classList.add('invisible');
