@@ -25,7 +25,9 @@ window.pictures = (function () {
         var elementTagName = newElement.tagName;
         if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
           var nameFilter = document.getElementById(newElement.htmlFor).value;
-          document.querySelector('#filter-' + nameFilter).click(); // подсветка выбранного фильтра
+          window.ariaRole.ariaCheckedFalse('.filters-item');
+          window.ariaRole.ariaRoleToggle(newElement, 'aria-checked');
+          document.querySelector('#filter-' + nameFilter).click();
         }
         switch (nameFilter) {
           case 'popular':

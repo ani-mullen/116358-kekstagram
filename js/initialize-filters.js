@@ -4,16 +4,16 @@ window.initializeFilters = (function () {
 
   return function (element, callback) {
 
-    document.querySelector('#upload-filter-none').click(); // подстветка первого фильтра
+    document.querySelector('#upload-filter-none').checked = true;
 
-    function filterClickHandler(evt) {
+    function filterChange(evt) {
       var newElement = evt.target.parentNode;
       var elementTagName = newElement.tagName;
       if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
         var nameFilter = document.getElementById(newElement.htmlFor).value;
-        ariaCheckedFalse(); // обнуление aria-checked
-        window.ariaRoleToggle(evt.target, 'aria-checked'); // переключение aria-checked
-        document.querySelector('#upload-filter-' + nameFilter).click(); // подсветка выбранного фильтра
+        window.ariaRole.ariaCheckedFalse('.upload-filter-preview'); // обнуление aria-checked
+        window.ariaRole.ariaRoleToggle(evt.target, 'aria-checked'); // переключение aria-checked
+        document.querySelector('#upload-filter-' + nameFilter).checked = true; // подсветка выбранного фильтра
 
         if (typeof callback === 'function') {
           callback(nameFilter);
@@ -21,30 +21,22 @@ window.initializeFilters = (function () {
       }
     }
 
-    // очистка aria-checked
-    var ariaCheckedFalse = function () {
-      var ariaRoleFilter = document.querySelectorAll('.upload-filter-preview');
-      for (var i = ariaRoleFilter.length; i--;) {
-        ariaRoleFilter[i].setAttribute('aria-checked', false);
-      }
-    };
-
     // возвращение aria-checked = true первому выбранному фильтру
     var ariaRoleFilterNoneTrue = function () {
       var ariaRoleNone = document.querySelector('.upload-filter-preview');
       ariaRoleNone.setAttribute('aria-checked', true);
     };
 
-    ariaRoleFilterNoneTrue();
-
-    function filterChange(evt) {
-      filterClickHandler(evt);
+    function filterClickHandler(evt) {
+      filterChange(evt);
     }
 
-    element.addEventListener('click', filterChange);
-    element.addEventListener('keydown', filterChange);
+    element.addEventListener('click', filterClickHandler);
+    element.addEventListener('keydown', filterClickHandler);
 
     return function () {
+      window.ariaRole.ariaCheckedFalse('.upload-filter-preview');
+      ariaRoleFilterNoneTrue();
       if (typeof callback === 'function') {
         callback('none');
       }
