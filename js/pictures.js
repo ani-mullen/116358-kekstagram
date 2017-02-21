@@ -60,17 +60,12 @@ window.pictures = (function () {
 
       filters.classList.remove('hidden');
     }
+
     var shuffleArray = function (array) {
-      var picturesRandom = [].concat(array);
-      var count = array.length;
-      while (count > 0) {
-        var i = Math.floor(Math.random() * count);
-        count--;
-        var temp = array[count];
-        array[count] = picturesRandom[i];
-        picturesRandom[i] = temp;
-      }
-      return picturesRandom.slice(0, 10).forEach(renderingPost);
+      var picturesSort = [].concat(array).sort(function () {
+        return Math.random() - 0.5;
+      });
+      return picturesSort.slice(0, 10).forEach(renderingPost);
     };
 
     function renderingPost(picture) {
