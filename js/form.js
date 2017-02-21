@@ -39,12 +39,12 @@ window.pictures();
     uploadImageName.value = (''); // очистка названия картинки
 
 
-    window.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
+    window.ariaRole.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
     framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-pressed для framingFormClose
   });
 
   var clearValues = function () {
-    window.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
+    window.ariaRole.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
     uploadImageLabel.setAttribute('aria-pressed', false); // очистка значения aria-pressed для uploadImageLabel
     resetScale();
     resetFilter();

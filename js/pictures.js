@@ -4,18 +4,69 @@ window.pictures = (function () {
 
   var DATA_URL = 'https://intensive-javascript-server-myophkugvq.now.sh/kekstagram/data';
   var pictureBox = document.querySelector('.pictures');
+  var filters = document.querySelector('.filters');
 
   return function () {
 
     window.load(DATA_URL, onload);
 
     function onload(data) {
-      pictureBox.innerHTML = '';
       var pictures = data.target.response;
-      for (var i = 0; i < pictures.length; i++) {
-        renderingPost(pictures[i]);
+      function inizialeArray() {
+        pictures.forEach(renderingPost);
       }
+      inizialeArray();
+
+      function filterClickHandler(evt, callback) {
+        var newElement = evt.target;
+        var elementTagName = newElement.tagName;
+        if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
+          var nameFilter = document.getElementById(newElement.htmlFor).value;
+          window.ariaRole.ariaCheckedFalse('.filters-item');
+          window.ariaRole.ariaRoleToggle(newElement, 'aria-checked');
+          document.querySelector('#filter-' + nameFilter).click();
+          pictureBox.innerHTML = '';
+        }
+        if (typeof callback === 'function') {
+          callback(nameFilter);
+        }
+      }
+
+      var changePostArray = function (nameFilter) {
+        switch (nameFilter) {
+          case 'popular':
+            inizialeArray();
+            break;
+
+          case 'new':
+            shuffleArray(pictures);
+            break;
+
+          case 'discussed':
+            var picturesSort = [].concat(pictures).sort(function (a, b) {
+              return b.comments.length - a.comments.length;
+            });
+            picturesSort.forEach(renderingPost);
+            break;
+        }
+      };
+
+      function filterChange(evt) {
+        filterClickHandler(evt, changePostArray);
+      }
+
+      filters.addEventListener('click', filterChange);
+      filters.addEventListener('keydown', filterChange);
+
+      filters.classList.remove('hidden');
     }
+
+    var shuffleArray = function (array) {
+      var picturesSort = [].concat(array).sort(function () {
+        return Math.random() - 0.5;
+      });
+      return picturesSort.slice(0, 10).forEach(renderingPost);
+    };
 
     function renderingPost(picture) {
       var pictureTemplate = document.querySelector('#picture-template');

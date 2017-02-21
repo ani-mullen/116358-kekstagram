@@ -21,7 +21,7 @@ window.showGallery = (function () {
 
     var hideGalleryOverlay = function () {
       galleryOverlay.classList.add('invisible');
-      window.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
+      window.ariaRole.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
       window.removeEventListener('keydown', onKeyDownEsc);
     };
 
@@ -35,7 +35,7 @@ window.showGallery = (function () {
       }
     });
     return function () {
-      window.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
+      window.ariaRole.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
     };
   };
 })();
