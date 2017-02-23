@@ -8,9 +8,9 @@ window.ariaRole = (function () {
       item.setAttribute(valueAttribute, !booleanValue);
     },
     ariaCheckedFalse: function (param) {
-      var ariaRoleFilter = document.querySelectorAll(param);
-      for (var i = ariaRoleFilter.length; i--;) {
-        ariaRoleFilter[i].setAttribute('aria-checked', false);
+      var ariaRoleFilters = document.querySelectorAll(param);
+      for (var i = ariaRoleFilters.length; i--;) {
+        ariaRoleFilters[i].setAttribute('aria-checked', false);
       }
     }
   };
