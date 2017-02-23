@@ -12,63 +12,47 @@ window.pictures = (function () {
 
     function onload(data) {
       var pictures = data.target.response;
-      function inizialeArray() {
-        pictures.forEach(renderingPost);
-      }
-      inizialeArray();
-
-      function filterClickHandler(evt, callback) {
-        var newElement = evt.target;
-        var elementTagName = newElement.tagName;
-        if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
-          var nameFilter = document.getElementById(newElement.htmlFor).value;
-          window.ariaRole.ariaCheckedFalse('.filters-item');
-          window.ariaRole.ariaRoleToggle(newElement, 'aria-checked');
-          document.querySelector('#filter-' + nameFilter).click();
-          pictureBox.innerHTML = '';
-        }
-        if (typeof callback === 'function') {
-          callback(nameFilter);
-        }
-      }
-
-      var changePostArray = function (nameFilter) {
-        switch (nameFilter) {
-          case 'popular':
-            inizialeArray();
-            break;
-
-          case 'new':
-            shuffleArray(pictures);
-            break;
-
-          case 'discussed':
-            var picturesSort = [].concat(pictures).sort(function (a, b) {
-              return b.comments.length - a.comments.length;
-            });
-            picturesSort.forEach(renderingPost);
-            break;
-        }
-      };
+      pictureBox.append(pictures.map(renderingPost).reduce(addPictureToDocumentFragment, document.createDocumentFragment()));
 
       function filterChange(evt) {
-        filterClickHandler(evt, changePostArray);
+        var nameFilter = evt.target;
+        var elementTagName = nameFilter.tagName;
+        if ((window.assist.isClickEvent(evt) || window.assist.isActivationEvent(evt)) && (elementTagName === 'LABEL')) {
+          window.ariaRole.ariaCheckedFalse('.filters-item');
+          window.ariaRole.ariaRoleToggle(nameFilter, 'aria-checked');
+          document.querySelector('#filter-' + document.getElementById(nameFilter.htmlFor).value).click();
+          switch (evt.target.htmlFor) {
+            case 'filter-popular':
+              pictureBox.append(pictures.filter(filter).map(renderingPost).reduce(addPictureToDocumentFragment, document.createDocumentFragment()));
+              break;
+
+            case 'filter-new':
+              pictureBox.append(pictures.filter(filter).sort(function () {
+                return Math.random() - 0.5;
+              }).slice(0, 10).map(renderingPost).reduce(addPictureToDocumentFragment, document.createDocumentFragment()));
+              break;
+
+            case 'filter-discussed':
+              pictureBox.append(pictures.filter(filter).sort(function (a, b) {
+                return b.comments.length - a.comments.length;
+              }).map(renderingPost).reduce(addPictureToDocumentFragment, document.createDocumentFragment()));
+              break;
+          }
+        }
       }
 
-      filters.addEventListener('click', filterChange);
-      filters.addEventListener('keydown', filterChange);
+      function filterClickHandler(evt) {
+        filterChange(evt);
+      }
+
+      filters.addEventListener('click', filterClickHandler);
+      filters.addEventListener('keydown', filterClickHandler);
 
       filters.classList.remove('hidden');
     }
 
-    var shuffleArray = function (array) {
-      var picturesSort = [].concat(array).sort(function () {
-        return Math.random() - 0.5;
-      });
-      return picturesSort.slice(0, 10).forEach(renderingPost);
-    };
-
     function renderingPost(picture) {
+      pictureBox.innerHTML = '';
       var pictureTemplate = document.querySelector('#picture-template');
       var pictureToClone = pictureTemplate.content.querySelector('.picture');
       var pictureElement = pictureToClone.cloneNode(true);
@@ -77,6 +61,7 @@ window.pictures = (function () {
       pictureElement.querySelector('img').src = picture.url;
       pictureElement.querySelector('.picture-likes').textContent = picture.likes;
       pictureElement.querySelector('.picture-comments').textContent = picture.comments.length;
+
 
       function pictureClickHandler(evt) {
         evt.preventDefault();
@@ -93,7 +78,16 @@ window.pictures = (function () {
         }
       });
 
-      return pictureBox.appendChild(pictureElement);
+      return pictureElement;
+    }
+
+    var addPictureToDocumentFragment = function (result, element) {
+      result.append(element);
+      return result;
+    };
+
+    function filter() {
+      return true;
     }
   };
 
