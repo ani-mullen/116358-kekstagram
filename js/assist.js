@@ -5,9 +5,9 @@ window.assist = (function () {
   var ENTER_KEY_CODE = 13;
   var ESCAPE_KEY_CODE = 27;
 
-  var isKeyboardEvent = function (evt) {
+  function isKeyboardEvent(evt) {
     return typeof evt.keyCode !== 'undefined';
-  };
+  }
   return {
     isClickEvent: function (evt) {
       return evt.type === 'click';

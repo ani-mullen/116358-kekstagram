@@ -5,19 +5,22 @@ window.showGallery = (function () {
     var galleryOverlay = document.querySelector('.gallery-overlay');
     var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
 
-    var onKeyDownEsc = function (evt) {
+    function onKeyDownEsc(evt) {
       if (window.assist.isDeactivationEvent(evt)) {
         galleryOverlay.classList.add('invisible');
       }
-    };
+    }
 
-    galleryOverlay.classList.remove('invisible');
-    window.addEventListener('keydown', onKeyDownEsc);
-    galleryOverlayClose.setAttribute('aria-pressed', false);
-    galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', picture.url);
-    galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
-    galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
+    function showPicture() {
+      galleryOverlay.classList.remove('invisible');
+      window.addEventListener('keydown', onKeyDownEsc);
+      galleryOverlayClose.setAttribute('aria-pressed', false);
+      galleryOverlay.querySelector('.gallery-overlay-image').setAttribute('src', picture.url);
+      galleryOverlay.querySelector('.likes-count').textContent = picture.likes;
+      galleryOverlay.querySelector('.comments-count').textContent = picture.comments.length;
+    }
 
+    showPicture();
 
     var hideGalleryOverlay = function () {
       galleryOverlay.classList.add('invisible');

@@ -1,27 +1,12 @@
 'use strict';
 
-var imagePreview = document.querySelector('.filter-image-preview');
-
-// Изменение масштаба
-var scaleClickHandler = function (scaleNumber) {
-  imagePreview.style.transform = 'scale(' + scaleNumber + ')';
-};
-
-// Изменени фильтра
-var filterClickHandler = function (nameFilter) {
-  imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
-  imagePreview.classList.add('filter-' + nameFilter);
-};
-
-var resetScale = window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
-var resetFilter = window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
-window.pictures();
-
-// Переключение виджетов
 (function () {
   var framingFormClose = document.querySelector('.upload-form-cancel');
   var uploadImageName = document.querySelector('#upload-file');
   var uploadImageLabel = document.querySelector('.upload-file');
+  var imagePreview = document.querySelector('.filter-image-preview');
+  var resetScale = window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
+  var resetFilter = window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
 
   // Обработчик нажатия на форму загрузки
   uploadImageLabel.addEventListener('keydown', function (evt) {
@@ -43,12 +28,13 @@ window.pictures();
     framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-pressed для framingFormClose
   });
 
-  var clearValues = function () {
+  function clearValues() {
     window.ariaRole.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
     uploadImageLabel.setAttribute('aria-pressed', false); // очистка значения aria-pressed для uploadImageLabel
     resetScale();
     resetFilter();
-  };
+  }
+
   // Обработчик клика на крест
   framingFormClose.addEventListener('click', function () {
     window.isWidgetVisibility.hideFramingForm();
@@ -62,4 +48,17 @@ window.pictures();
       clearValues();
     }
   });
+
+  // Изменение масштаба
+  function scaleClickHandler(scaleNumber) {
+    imagePreview.style.transform = 'scale(' + scaleNumber + ')';
+  }
+
+  // Изменение фильтра
+  function filterClickHandler(nameFilter) {
+    imagePreview.className = 'filter-image-preview'; // сброс классов-фильтров
+    imagePreview.classList.add('filter-' + nameFilter);
+  }
+
+  window.pictures();
 })();
