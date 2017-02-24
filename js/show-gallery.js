@@ -1,12 +1,13 @@
 'use strict';
 
 window.showGallery = (function () {
+  var galleryOverlay = document.querySelector('.gallery-overlay');
+  var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
+  var galleryOverlayImage = galleryOverlay.querySelector('.gallery-overlay-image');
+  var galleryOverlayLikes = galleryOverlay.querySelector('.likes-count');
+  var galleryOverlayComments = galleryOverlay.querySelector('.comments-count');
+
   return function (picture) {
-    var galleryOverlay = document.querySelector('.gallery-overlay');
-    var galleryOverlayClose = galleryOverlay.querySelector('.gallery-overlay-close');
-    var galleryOverlayImage = galleryOverlay.querySelector('.gallery-overlay-image');
-    var galleryOverlayLikes = galleryOverlay.querySelector('.likes-count');
-    var galleryOverlayComments = galleryOverlay.querySelector('.comments-count');
 
     function onKeyDownEsc(evt) {
       if (window.assist.isDeactivationEvent(evt)) {
@@ -14,22 +15,11 @@ window.showGallery = (function () {
       }
     }
 
-    function showPicture() {
-      galleryOverlay.classList.remove('invisible');
-      window.addEventListener('keydown', onKeyDownEsc);
-      galleryOverlayClose.setAttribute('aria-pressed', false);
-      galleryOverlayImage.setAttribute('src', picture.url);
-      galleryOverlayLikes.textContent = picture.likes;
-      galleryOverlayComments.textContent = picture.comments.length;
-    }
-
-    showPicture();
-
-    var hideGalleryOverlay = function () {
+    function hideGalleryOverlay() {
       galleryOverlay.classList.add('invisible');
       window.ariaRole.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
       window.removeEventListener('keydown', onKeyDownEsc);
-    };
+    }
 
     galleryOverlayClose.addEventListener('click', function () {
       hideGalleryOverlay();
@@ -40,9 +30,18 @@ window.showGallery = (function () {
         hideGalleryOverlay();
       }
     });
+
+    galleryOverlay.classList.remove('invisible');
+    galleryOverlayClose.focus();
+    window.addEventListener('keydown', onKeyDownEsc);
+    galleryOverlayClose.setAttribute('aria-pressed', false);
+
+    galleryOverlayImage.setAttribute('src', picture.url);
+    galleryOverlayLikes.textContent = picture.likes;
+    galleryOverlayComments.textContent = picture.comments.length;
+
     return function () {
       window.ariaRole.ariaRoleToggle(galleryOverlayClose, 'aria-pressed');
-      window.removeEventListener('keydown', onKeyDownEsc);
     };
   };
 })();

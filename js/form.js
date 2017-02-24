@@ -5,8 +5,6 @@
   var uploadImageName = document.querySelector('#upload-file');
   var uploadImageLabel = document.querySelector('.upload-file');
   var imagePreview = document.querySelector('.filter-image-preview');
-  var resetScale = window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
-  var resetFilter = window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
 
   // Обработчик нажатия на форму загрузки
   uploadImageLabel.addEventListener('keydown', function (evt) {
@@ -22,8 +20,8 @@
   uploadImageName.addEventListener('change', function () {
     window.isWidgetVisibility.openFramingForm();
     uploadImageName.value = (''); // очистка названия картинки
-
-
+    window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler); // масштабирование
+    window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler); // переключение фильтров
     window.ariaRole.ariaRoleToggle(uploadImageLabel, 'aria-pressed'); // изменение значения aria-pressed кнопки uploadImageLabel
     framingFormClose.setAttribute('aria-pressed', false); // очистка значения aria-pressed для framingFormClose
   });
@@ -31,8 +29,8 @@
   function clearValues() {
     window.ariaRole.ariaRoleToggle(framingFormClose, 'aria-pressed'); // изменение значения aria-pressed кнопки framingFormClose
     uploadImageLabel.setAttribute('aria-pressed', false); // очистка значения aria-pressed для uploadImageLabel
-    resetScale();
-    resetFilter();
+    window.createScale(document.querySelector('.upload-resize-controls'), scaleClickHandler)();
+    window.initializeFilters(document.querySelector('.upload-filter-controls'), filterClickHandler)();
   }
 
   // Обработчик клика на крест

@@ -40,6 +40,8 @@ window.initializeFilters = (function () {
       if (typeof callback === 'function') {
         callback('none');
       }
+      element.addEventListener('click', filterClickHandler);
+      element.addEventListener('keydown', filterClickHandler);
     };
 
   };

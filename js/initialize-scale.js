@@ -21,9 +21,9 @@ window.createScale = (function () {
     }
 
     setImageSize(100);
+    var currentNumber = parseInt(resizeValue.value, 10);
 
     function resizeImageValue(step) {
-      var currentNumber = parseInt(resizeValue.value, 10);
       currentNumber += step;
       if (currentNumber >= 25 && currentNumber <= 100) {
         setImageSize(currentNumber);
@@ -41,7 +41,8 @@ window.createScale = (function () {
     resizeInc.addEventListener('click', increaseSize);
 
     return function () {
-      setImageSize(100);
+      resizeDec.removeEventListener('click', decreaseSize);
+      resizeInc.removeEventListener('click', increaseSize);
     };
   };
 
