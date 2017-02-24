@@ -81,10 +81,10 @@ window.pictures = (function () {
       return pictureElement;
     }
 
-    var addPictureToDocumentFragment = function (result, element) {
+    function addPictureToDocumentFragment(result, element) {
       result.append(element);
       return result;
-    };
+    }
 
     function filter() {
       return true;

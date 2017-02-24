@@ -22,10 +22,10 @@ window.initializeFilters = (function () {
     }
 
     // возвращение aria-checked = true первому выбранному фильтру
-    var ariaRoleFilterNoneTrue = function () {
+    function ariaRoleFilterNoneTrue() {
       var ariaRoleNone = document.querySelector('.upload-filter-preview');
       ariaRoleNone.setAttribute('aria-checked', true);
-    };
+    }
 
     function filterClickHandler(evt) {
       filterChange(evt);
@@ -40,6 +40,8 @@ window.initializeFilters = (function () {
       if (typeof callback === 'function') {
         callback('none');
       }
+      element.addEventListener('click', filterClickHandler);
+      element.addEventListener('keydown', filterClickHandler);
     };
 
   };

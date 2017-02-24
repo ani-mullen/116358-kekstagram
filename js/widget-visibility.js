@@ -5,24 +5,24 @@ window.isWidgetVisibility = (function () {
   var framingForm = document.querySelector('.upload-overlay');
   var onframingFormClose = null;
 
-  var toggleWidgets = function () {
+  function toggleWidgets() {
     uploadForm.classList.toggle('invisible');
     framingForm.classList.toggle('invisible');
-  };
+  }
   // Если нажали на Esc
-  var onKeyDownEsc = function (evt) {
+  function onKeyDownEsc(evt) {
     if (window.assist.isDeactivationEvent(evt)) {
       toggleWidgets();
     }
-  };
+  }
   // Функция переключения видимости загрузчика и редактора
-  var openFramingForm = function () {
+  function openFramingForm() {
     toggleWidgets();
     document.addEventListener('keydown', onKeyDownEsc);
-  };
+  }
 
   // Функция скрытия редактора
-  var hideFramingForm = function () {
+  function hideFramingForm() {
     framingForm.classList.add('invisible');
     uploadForm.classList.remove('invisible');
     document.removeEventListener('keydown', onKeyDownEsc);
@@ -30,11 +30,11 @@ window.isWidgetVisibility = (function () {
     if (typeof onframingFormClose === 'function') {
       onframingFormClose();
     }
-  };
+  }
 
-  var focusUploadForm = function (callback) {
+  function focusUploadForm(callback) {
     onframingFormClose = callback;
-  };
+  }
 
   return {
     openFramingForm: openFramingForm,
